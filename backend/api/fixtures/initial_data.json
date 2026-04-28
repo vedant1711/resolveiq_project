@@ -1,0 +1,34 @@
+[
+  {
+    "model": "api.userprofile",
+    "pk": 1,
+    "fields": { "username": "harsh", "role": "vp_ops", "display_name": "Harsh Mehta" }
+  },
+  {
+    "model": "api.userprofile",
+    "pk": 2,
+    "fields": { "username": "vedant", "role": "developer", "display_name": "Vedant Shah" }
+  },
+  {
+    "model": "api.userprofile",
+    "pk": 3,
+    "fields": { "username": "devika", "role": "developer", "display_name": "Devika Rao" }
+  },
+  {
+    "model": "api.vpmetricsmock",
+    "pk": 1,
+    "fields": {
+      "total_hours_saved": 342,
+      "dollars_saved": 25650,
+      "kb_capture_rate": 88.0,
+      "mttr_trend_data": [
+        {"month": "Oct", "mttr_hours": 18.4},
+        {"month": "Nov", "mttr_hours": 15.1},
+        {"month": "Dec", "mttr_hours": 13.8},
+        {"month": "Jan", "mttr_hours": 11.2},
+        {"month": "Feb", "mttr_hours": 9.7},
+        {"month": "Mar", "mttr_hours": 7.3}
+      ]
+    }
+  }
+]

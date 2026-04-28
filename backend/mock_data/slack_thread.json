@@ -1,0 +1,52 @@
+{
+  "channel": "incidents-eu-infra",
+  "incident_id": "INC-2024-0847",
+  "thread_ts": "1717603200.000100",
+  "messages": [
+    {
+      "user": "devika.rao",
+      "timestamp": "2024-06-05T09:14:00Z",
+      "text": "@channel P1 alert: EU region users getting SAML login failures from Okta. Error: 'SAML assertion is not yet valid'. Affects ~200 users in London and Frankfurt offices. Started approx 09:05 UTC."
+    },
+    {
+      "user": "vedant.shah",
+      "timestamp": "2024-06-05T09:18:00Z",
+      "text": "Checking Okta admin console now. Seeing a spike in SAML assertion errors starting exactly 09:05. The error message is 'NotBefore condition not met'. This is a time/clock skew issue."
+    },
+    {
+      "user": "devika.rao",
+      "timestamp": "2024-06-05T09:22:00Z",
+      "text": "Confirmed. Our EU Okta tenant was recently migrated to a new data center cluster last night during the maintenance window. The NTP sync on the new nodes may have drifted."
+    },
+    {
+      "user": "vedant.shah",
+      "timestamp": "2024-06-05T09:31:00Z",
+      "text": "Root cause confirmed: the new EU data center cluster has a clock skew of ~4 minutes compared to the Okta SP metadata clock tolerance which is set to 3 minutes by default. SAML assertions issued by the new nodes are timestamped 4 minutes ahead."
+    },
+    {
+      "user": "arjun.kapoor",
+      "timestamp": "2024-06-05T09:35:00Z",
+      "text": "What's the fix? Can we update the clock skew tolerance in Okta?"
+    },
+    {
+      "user": "vedant.shah",
+      "timestamp": "2024-06-05T09:38:00Z",
+      "text": "Yes. In Okta Admin > Security > Identity Providers > [Our Okta SAML config] > Advanced Settings, changed 'Clock Skew' from 3 minutes to 7 minutes. This is within safe SAML spec limits. Deploying now."
+    },
+    {
+      "user": "devika.rao",
+      "timestamp": "2024-06-05T09:44:00Z",
+      "text": "EU users are confirming successful logins now. Incident resolved. Total impact: 39 minutes, ~200 users."
+    },
+    {
+      "user": "arjun.kapoor",
+      "timestamp": "2024-06-05T09:47:00Z",
+      "text": "Prevention items: (1) Add NTP drift monitoring alert for all Okta cluster nodes via Datadog. (2) Add post-data-center-migration checklist item: validate NTP sync and SAML assertion timing before cutting over. (3) Document the clock skew config location for future on-call engineers."
+    },
+    {
+      "user": "vedant.shah",
+      "timestamp": "2024-06-05T09:50:00Z",
+      "text": "Agreed. I'll create the Datadog monitor. Someone should write up the runbook and link it to the IT-4071 ticket. Marking this thread as resolved."
+    }
+  ]
+}
