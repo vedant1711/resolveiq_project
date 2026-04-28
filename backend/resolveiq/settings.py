@@ -151,3 +151,4 @@ USE_JIRA_TICKETS = os.getenv("USE_JIRA_TICKETS", "false").lower() == "true"
 # Slack
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN", "")
 SLACK_CHANNEL_ID = os.getenv("SLACK_CHANNEL_ID", "")
+REQUIRE_SLACK_TRANSCRIPT = os.getenv("REQUIRE_SLACK_TRANSCRIPT", "false").lower() == "true"

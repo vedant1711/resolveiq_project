@@ -38,6 +38,12 @@ def generate_draft(request, ticket_id):
             print(f"[Slack Error] {ticket_id}: {e}")
 
     if not transcript:
+        if settings.REQUIRE_SLACK_TRANSCRIPT:
+            return Response(
+                {"error": "Slack transcript not found for ticket. Check SLACK_CHANNEL_ID, bot scopes, and channel membership."},
+                status=400,
+            )
+
         # Fallback: read the mock Slack thread
         mock_path = os.path.join(settings.BASE_DIR, "mock_data", "slack_thread.json")
         with open(mock_path, "r") as f:
