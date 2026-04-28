@@ -2,7 +2,7 @@
 
 import { Fragment, useMemo, useState } from "react";
 import Image from "next/image";
-import type { JiraTicket, AnalyzeResult } from "@/types";
+import type { JiraTicket, AnalyzeResult, GenerateDraftResult } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -55,6 +55,9 @@ export default function ActiveTicketsTable({ tickets, onRefresh }: ActiveTickets
   const [scoreOverrides, setScoreOverrides] = useState<Record<string, AnalyzeResult>>({});
   const [analysisResults, setAnalysisResults] = useState<Record<string, AnalyzeResult>>({});
   const [loadingTicket, setLoadingTicket] = useState<string | null>(null);
+  const [draftLoadingTicket, setDraftLoadingTicket] = useState<string | null>(null);
+  const [draftResults, setDraftResults] = useState<Record<string, GenerateDraftResult>>({});
+  const [draftErrors, setDraftErrors] = useState<Record<string, string>>({});
 
   const ticketsWithScores = useMemo(() => {
     return tickets.map((ticket) => {
@@ -103,6 +106,20 @@ export default function ActiveTicketsTable({ tickets, onRefresh }: ActiveTickets
       onRefresh();
     } finally {
       setLoadingTicket(null);
+    }
+  };
+
+  const handleGenerateDraft = async (ticket: JiraTicket) => {
+    setDraftLoadingTicket(ticket.ticket_id);
+    setDraftErrors((prev) => ({ ...prev, [ticket.ticket_id]: "" }));
+    try {
+      const result = await api.generateDraft(ticket.ticket_id);
+      setDraftResults((prev) => ({ ...prev, [ticket.ticket_id]: result }));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to generate draft";
+      setDraftErrors((prev) => ({ ...prev, [ticket.ticket_id]: message }));
+    } finally {
+      setDraftLoadingTicket(null);
     }
   };
 
@@ -227,7 +244,39 @@ export default function ActiveTicketsTable({ tickets, onRefresh }: ActiveTickets
                               Matched Articles
                             </div>
                             {analysisResults[ticket.ticket_id].matched_articles.length === 0 ? (
-                              <div className="text-sm text-muted-foreground">No articles found.</div>
+                              <div className="space-y-3">
+                                <div className="text-sm text-muted-foreground">No articles found.</div>
+                                <div className="flex flex-wrap items-center gap-3">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="font-mono text-[10px] uppercase tracking-[0.15em]"
+                                    onClick={() => handleGenerateDraft(ticket)}
+                                    disabled={draftLoadingTicket === ticket.ticket_id}
+                                  >
+                                    {draftLoadingTicket === ticket.ticket_id ? "Generating…" : "Generate Draft from Slack"}
+                                  </Button>
+                                  {draftErrors[ticket.ticket_id] && (
+                                    <span className="text-xs text-red-500">{draftErrors[ticket.ticket_id]}</span>
+                                  )}
+                                </div>
+                                {draftResults[ticket.ticket_id] && (
+                                  <div className="rounded-md border border-border/70 bg-surface px-3 py-2 text-sm">
+                                    <div className="text-xs font-mono uppercase tracking-[0.15em] text-muted-foreground">Draft Created</div>
+                                    <div className="mt-1 font-medium">{draftResults[ticket.ticket_id].generated_title}</div>
+                                    {draftResults[ticket.ticket_id].confluence_url && (
+                                      <a
+                                        href={draftResults[ticket.ticket_id].confluence_url || undefined}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-2 inline-block text-xs font-mono text-brand-cyan hover:underline"
+                                      >
+                                        Review Draft in Confluence →
+                                      </a>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
                             ) : (
                               <div className="space-y-2">
                                 {analysisResults[ticket.ticket_id].matched_articles.map((article) => (
