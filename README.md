@@ -15,15 +15,21 @@ ResolveIQ_Project/
 - Node.js 18+
 - Python 3.9+
 
-## Frontend (Next.js)
+## Clone & Setup
 
 ```zsh
-cd frontend
-npm install
-npm run dev
+git clone git@github.com:vedant1711/ResolveIQ_Project.git
+cd ResolveIQ_Project
 ```
 
-Default: http://localhost:3000
+## Environment Variables
+
+```zsh
+cp backend/.env.example backend/.env
+cp frontend/.env.local.example frontend/.env.local
+```
+
+Fill in the required values in `backend/.env` (OpenAI, Pinecone, Jira/Confluence, Slack).
 
 ## Backend (Django)
 
@@ -38,11 +44,18 @@ python manage.py runserver
 
 Default: http://localhost:8000
 
-## Environment
+## Frontend (Next.js)
 
-Backend uses `backend/.env`. Frontend can use `frontend/.env.local`.
+```zsh
+cd frontend
+npm install
+npm run dev
+```
+
+Default: http://localhost:3000
 
 ## Notes
 
+- If Next.js fails with Turbopack errors, run `npm run dev -- --no-turbo`.
 - Jira/Confluence/OpenAI/Pinecone/Slack require valid credentials in `backend/.env`.
 - For local dev, keep both apps running to enable dashboard API calls.
