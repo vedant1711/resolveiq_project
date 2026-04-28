@@ -1,5 +1,5 @@
 from django.urls import path
-from api.views import auth_views, dashboard_views, ticket_views, draft_views, webhook_views
+from api.views import auth_views, dashboard_views, ticket_views, draft_views, webhook_views, slack_views
 
 urlpatterns = [
     path("auth/mock-login/", auth_views.mock_login),
@@ -8,6 +8,12 @@ urlpatterns = [
     path("tickets/<str:ticket_id>/analyze/", ticket_views.analyze_ticket),
     path("tickets/<str:ticket_id>/transition/", ticket_views.transition_ticket),
     path("tickets/<str:ticket_id>/generate-draft/", draft_views.generate_draft),
+
+    # Slack Integration
+    path("slack/oauth/start/", slack_views.slack_oauth_start),
+    path("slack/oauth/callback/", slack_views.slack_oauth_callback),
+    path("slack/events/", slack_views.slack_events),
+    path("slack/status/", slack_views.slack_status),
 
     # Live integrations
     path("webhooks/jira/", webhook_views.jira_webhook),
