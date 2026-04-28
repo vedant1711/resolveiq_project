@@ -73,22 +73,22 @@ export default function VPDashboardPage() {
             <div className="riq-fade-up riq-stagger-1 grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               <MetricCard
                 label="Total Hours Saved"
-                value={metrics.total_hours_saved.toString()}
+                value={String(metrics.total_hours_saved ?? 0)}
                 unit="hrs"
                 icon="clock"
                 tone="cyan"
               />
               <MetricCard
                 label="Cost Savings"
-                value={metrics.dollars_saved.toLocaleString()}
+                value={Number(metrics.dollars_saved ?? 0).toLocaleString()}
                 prefix="$"
                 icon="dollar"
                 tone="cyan"
               />
               <MetricCard
                 label="Team Capacity"
-                value={`${metrics.team_size} engineers`}
-                subtext={`@ $${metrics.avg_hourly_rate}/hr avg`}
+                value={`${metrics.team_size ?? 0} engineers`}
+                subtext={`@ $${metrics.avg_hourly_rate ?? 0}/hr avg`}
                 icon="team"
                 tone="blue"
               />
@@ -97,7 +97,7 @@ export default function VPDashboardPage() {
             <div className="riq-fade-up riq-stagger-2 grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <MetricCard
                 label="Time Spent Searching"
-                value={`${metrics.time_spent_searching_hours}`}
+                value={`${metrics.time_spent_searching_hours ?? 0}`}
                 unit="hrs"
                 subtext="Personal time saved"
                 icon="clock"
@@ -105,7 +105,7 @@ export default function VPDashboardPage() {
               />
               <MetricCard
                 label="Articles Contributed"
-                value={`${metrics.articles_contributed}`}
+                value={`${metrics.articles_contributed ?? 0}`}
                 subtext="Human-in-the-loop validation"
                 icon="team"
                 tone="blue"
@@ -113,16 +113,16 @@ export default function VPDashboardPage() {
             </div>
 
             <div className="riq-fade-up riq-stagger-3 mb-6">
-              <ActionCenter drafts={metrics.drafts_pending_review} />
+              <ActionCenter drafts={metrics.drafts_pending_review ?? []} />
             </div>
 
             {/* Charts row */}
             <div className="riq-fade-up riq-stagger-4 grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="md:col-span-3">
-                <MttrChart data={metrics.mttr_trend} />
+                <MttrChart data={metrics.mttr_trend ?? []} />
               </div>
               <div className="md:col-span-2">
-                <KbCaptureGauge value={metrics.kb_capture_rate} />
+                <KbCaptureGauge value={metrics.kb_capture_rate ?? 0} />
               </div>
             </div>
           </>
