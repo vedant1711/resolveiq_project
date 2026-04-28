@@ -8,8 +8,6 @@ Monorepo containing the ResolveIQ frontend (Next.js) and backend (Django/DRF).
 ResolveIQ_Project/
   frontend/               # Next.js app
   backend/                # Django + DRF API
-  DEPLOYMENT.md          # Detailed deployment guide
-  DEPLOYMENT_CHECKLIST.md # Step-by-step checklist
 ```
 
 ## 🚀 Quick Start (Local Development)
@@ -61,18 +59,7 @@ ResolveIQ is optimized for production deployment on:
 - **Backend**: Render (https://render.com)
 - **Frontend**: Vercel (https://vercel.com)
 
-### Deployment Guides
-
-| Guide | Purpose | Time |
-|-------|---------|------|
-| **[QUICK_START.md](QUICK_START.md)** | 3-step fast deployment | 30 min |
-| **[DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md)** | Detailed step-by-step | 30 min |
-| **[DEPLOYMENT.md](DEPLOYMENT.md)** | Complete reference guide | Reference |
-| **[SLACK_OAUTH_SETUP.md](SLACK_OAUTH_SETUP.md)** | Slack integration setup | 10 min |
-| **[ARCHITECTURE.md](ARCHITECTURE.md)** | System design & scaling | Reference |
-| **[DEPLOYMENT_SUMMARY.md](DEPLOYMENT_SUMMARY.md)** | High-level overview | Reference |
-
-**👉 New to deployment? Start with [QUICK_START.md](QUICK_START.md)**
+Deployment steps are described below in this README.
 
 ## 📋 Environment Variables
 
@@ -99,10 +86,8 @@ ATLASSIAN_API_TOKEN=...
 CONFLUENCE_SPACE_KEY=MSKB
 JIRA_PROJECT_KEY=IT
 
-# Slack (Set up OAuth first)
+# Slack (Bot token setup)
 SLACK_BOT_TOKEN=xoxb-...
-SLACK_CLIENT_ID=...
-SLACK_CLIENT_SECRET=...
 SLACK_CHANNEL_ID=C0123456789
 
 # CORS
@@ -114,8 +99,30 @@ FRONTEND_URL=http://localhost:3000
 
 ```
 NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_SLACK_CLIENT_ID=...  # After OAuth setup
 ```
+
+## 🤖 Slack Bot Token Setup (No OAuth)
+
+Follow these steps to get a bot token and channel ID for reading Slack threads:
+
+1. Go to https://api.slack.com/apps → **Create New App** → **From scratch**.
+2. Choose a name (e.g., ResolveIQ) and your workspace.
+3. In **OAuth & Permissions**, add **Bot Token Scopes**:
+  - `channels:history`
+  - `groups:history`
+  - `users:read`
+4. Click **Install to Workspace** and allow access.
+5. Copy the **Bot User OAuth Token** (`xoxb-...`).
+6. Get the channel ID:
+  - Open the channel in Slack → click the channel name → **Copy channel ID**.
+7. Set env vars in `backend/.env`:
+
+```
+SLACK_BOT_TOKEN=xoxb-...
+SLACK_CHANNEL_ID=C0123456789
+```
+
+If the channel is private, invite the bot to the channel: `/invite @ResolveIQ`.
 
 ## ⚙️ Features
 
@@ -132,7 +139,7 @@ NEXT_PUBLIC_SLACK_CLIENT_ID=...  # After OAuth setup
 - Publishes directly to Confluence
 
 ✅ **Slack Integration**
-- Live Slack OAuth (with mock fallback for demos)
+- Bot token based Slack API access
 - Thread transcript fetching
 
 ✅ **Modern UI**
