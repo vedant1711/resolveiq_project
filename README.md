@@ -61,22 +61,18 @@ ResolveIQ is optimized for production deployment on:
 - **Backend**: Render (https://render.com)
 - **Frontend**: Vercel (https://vercel.com)
 
-### Quick Deployment Steps
+### Deployment Guides
 
-1. **Read**: [`DEPLOYMENT_CHECKLIST.md`](DEPLOYMENT_CHECKLIST.md) for step-by-step instructions
-2. **Reference**: [`DEPLOYMENT.md`](DEPLOYMENT.md) for detailed guides and troubleshooting
-3. **Deploy Backend**: Push to Render (auto-deploy from GitHub)
-4. **Deploy Frontend**: Push to Vercel (auto-deploy from GitHub)
-5. **Configure Slack OAuth**: Generate redirect URLs from deployed services
+| Guide | Purpose | Time |
+|-------|---------|------|
+| **[QUICK_START.md](QUICK_START.md)** | 3-step fast deployment | 30 min |
+| **[DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md)** | Detailed step-by-step | 30 min |
+| **[DEPLOYMENT.md](DEPLOYMENT.md)** | Complete reference guide | Reference |
+| **[SLACK_OAUTH_SETUP.md](SLACK_OAUTH_SETUP.md)** | Slack integration setup | 10 min |
+| **[ARCHITECTURE.md](ARCHITECTURE.md)** | System design & scaling | Reference |
+| **[DEPLOYMENT_SUMMARY.md](DEPLOYMENT_SUMMARY.md)** | High-level overview | Reference |
 
-**Estimated time**: 15-20 minutes for both services
-
-### Production URLs (After Deployment)
-
-```
-Backend API:  https://resolveiq-backend.onrender.com
-Frontend:     https://resolveiq-frontend.vercel.app
-```
+**👉 New to deployment? Start with [QUICK_START.md](QUICK_START.md)**
 
 ## 📋 Environment Variables
 
