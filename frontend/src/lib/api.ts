@@ -71,7 +71,7 @@ export const api = {
 
   async listSlackChannels(): Promise<SlackChannel[]> {
     const res = await fetch(`${BASE}/api/slack/channels/`, { headers: getHeaders() });
-    if (!res.ok) throw new Error("Failed to load Slack channels");
+    if (!res.ok) throw new Error("Failed to load Slack channels. Default Slack channel will be used to Generate Drafts if the ticket information exist in the channels");
     const data = await res.json();
     return data.channels || [];
   },

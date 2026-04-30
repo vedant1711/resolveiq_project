@@ -43,7 +43,7 @@ def list_channels() -> list:
     if not settings.SLACK_BOT_TOKEN:
         return []
 
-    url = "https://slack.com/api/conversations.list"
+    url = "https://slack.com/api/users.conversations"
     params = {
         "limit": 200,
         "exclude_archived": True,

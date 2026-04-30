@@ -56,73 +56,74 @@ export default function VPDashboardPage() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[...Array(3)].map((_, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            {[...Array(4)].map((_, i) => (
               <Skeleton key={i} className="h-36 rounded-xl bg-surface" />
             ))}
-            {[...Array(2)].map((_, i) => (
-              <Skeleton key={`mid-${i}`} className="h-28 rounded-xl bg-surface" />
-            ))}
-            <Skeleton className="md:col-span-3 h-56 rounded-xl bg-surface" />
-            <Skeleton className="md:col-span-2 h-72 rounded-xl bg-surface" />
-            <Skeleton className="h-72 rounded-xl bg-surface" />
           </div>
         ) : metrics ? (
           <>
-            {/* Metric cards */}
-            <div className="riq-fade-up riq-stagger-1 grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <MetricCard
-                label="Total Hours Saved"
-                value={String(metrics.total_hours_saved ?? 0)}
-                unit="hrs"
-                icon="clock"
-                tone="cyan"
-              />
-              <MetricCard
-                label="Cost Savings"
-                value={Number(metrics.dollars_saved ?? 0).toLocaleString()}
-                prefix="$"
-                icon="dollar"
-                tone="cyan"
-              />
-              <MetricCard
-                label="Team Capacity"
-                value={`${metrics.team_size ?? 0} engineers`}
-                subtext={`@ $${metrics.avg_hourly_rate ?? 0}/hr avg`}
-                icon="team"
-                tone="blue"
-              />
-            </div>
-
-            <div className="riq-fade-up riq-stagger-2 grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <MetricCard
-                label="Time Spent Searching"
-                value={`${metrics.time_spent_searching_hours ?? 0}`}
-                unit="hrs"
-                subtext="Personal time saved"
-                icon="clock"
-                tone="cyan"
-              />
-              <MetricCard
-                label="Articles Contributed"
-                value={`${metrics.articles_contributed ?? 0}`}
-                subtext="Human-in-the-loop validation"
-                icon="team"
-                tone="blue"
-              />
-            </div>
-
-            <div className="riq-fade-up riq-stagger-3 mb-6">
-              <ActionCenter drafts={metrics.drafts_pending_review ?? []} />
-            </div>
-
-            {/* Charts row */}
-            <div className="riq-fade-up riq-stagger-4 grid grid-cols-1 md:grid-cols-5 gap-4">
-              <div className="md:col-span-3">
-                <MttrChart data={metrics.mttr_trend ?? []} />
+            {/* Top Metrics Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 riq-fade-up riq-stagger-1">
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">COST SAVINGS YTD</span>
+                <span className="text-4xl font-bold text-slate-900 mt-2">$54,200</span>
+                <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full mt-3 inline-flex w-fit">↑ 12% vs Q1</span>
               </div>
-              <div className="md:col-span-2">
-                <KbCaptureGauge value={metrics.kb_capture_rate ?? 0} />
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">HOURS RECOVERED</span>
+                <span className="text-4xl font-bold text-slate-900 mt-2">312</span>
+                <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full mt-3 inline-flex w-fit">↑ 18% vs Q1</span>
+              </div>
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">ESCALATIONS DEFLECTED</span>
+                <span className="text-4xl font-bold text-slate-900 mt-2">42</span>
+                <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full mt-3 inline-flex w-fit">↑ 25% vs baseline</span>
+              </div>
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">CONTEXT-DRIVEN RESOLUTIONS</span>
+                <span className="text-4xl font-bold text-slate-900 mt-2">105</span>
+                <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full mt-3 inline-flex w-fit">↑ 20% vs Q1</span>
+              </div>
+            </div>
+
+            {/* Bottom Section: CSS-Only Mock Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 riq-fade-up riq-stagger-2">
+              {/* Left Card: MTTR */}
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-sm font-semibold text-slate-900">Mean Time to Resolution (MTTR)</h3>
+                  <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">-44% Reduction</span>
+                </div>
+                <div className="flex flex-col gap-4 mt-2">
+                  <div>
+                    <div className="flex justify-between text-xs text-slate-500 mb-1">
+                      <span>Industry Baseline</span>
+                      <span>2.5 hrs</span>
+                    </div>
+                    <div className="w-full h-8 bg-slate-100 rounded-md overflow-hidden relative">
+                      <div className="absolute top-0 left-0 h-full bg-slate-200 rounded-md w-full"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-between text-xs text-slate-500 mb-1">
+                      <span className="font-semibold text-slate-700">ResolveIQ Assisted</span>
+                      <span className="font-semibold text-slate-700">1.4 hrs</span>
+                    </div>
+                    <div className="w-full h-8 bg-slate-100 rounded-md overflow-hidden relative">
+                      <div className="absolute top-0 left-0 h-full bg-blue-600 rounded-md" style={{ width: "56%" }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Card: KB Capture Rate */}
+              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col relative overflow-hidden">
+                <h3 className="text-sm font-semibold text-slate-900 mb-1">KB Capture Rate</h3>
+                <p className="text-xs text-slate-500 mb-6">Resolved incidents successfully mapped to knowledge base.</p>
+                <div className="flex-1 flex items-center justify-center -mt-4">
+                  <KbCaptureGauge value={88} />
+                </div>
               </div>
             </div>
           </>
