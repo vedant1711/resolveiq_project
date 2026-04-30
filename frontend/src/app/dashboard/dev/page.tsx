@@ -51,19 +51,19 @@ export default function DevDashboardPage() {
   return (
     <div className="min-h-screen bg-background relative">
       {/* Ambient layers */}
-      <div aria-hidden className="riq-grid-overlay pointer-events-none fixed inset-0 z-0" />
-      <div aria-hidden className="riq-mesh-glow pointer-events-none fixed inset-0 z-0" />
+      <div aria-hidden className="hidden dark:block riq-grid-overlay pointer-events-none fixed inset-0 z-0" />
+      <div aria-hidden className="hidden dark:block riq-mesh-glow pointer-events-none fixed inset-0 z-0" />
 
       <Navbar />
       <main className="relative z-10 max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Page header */}
         <div className="riq-fade-up mb-8">
           <div className="flex items-center gap-3 mb-1">
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-brand-cyan">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-brand-cyan">
               Dashboard · Developer
             </span>
           </div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">Developer Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-foreground">Developer Dashboard</h1>
           <p className="text-muted-foreground text-sm mt-1">
             Open tickets, AI analysis, and pending KB drafts
           </p>
