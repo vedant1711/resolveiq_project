@@ -27,11 +27,12 @@ def generate_draft(request, ticket_id):
     body = request.data
     transcript = body.get("transcript")
     ticket_summary = body.get("ticket_summary", "")
+    channel_id = body.get("channel_id")
 
     source = "transcript" if transcript else None
     if not transcript:
         try:
-            transcript = slack_service.get_slack_thread_transcript(ticket_id)
+            transcript = slack_service.get_slack_thread_transcript(ticket_id, channel_id=channel_id)
             if transcript:
                 source = "slack_live"
         except Exception as e:

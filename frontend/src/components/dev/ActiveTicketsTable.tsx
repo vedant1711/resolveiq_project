@@ -1,8 +1,8 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import type { JiraTicket, AnalyzeResult, GenerateDraftResult } from "@/types";
+import type { JiraTicket, AnalyzeResult, GenerateDraftResult, SlackChannel } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,6 +58,25 @@ export default function ActiveTicketsTable({ tickets, onRefresh }: ActiveTickets
   const [draftLoadingTicket, setDraftLoadingTicket] = useState<string | null>(null);
   const [draftResults, setDraftResults] = useState<Record<string, GenerateDraftResult>>({});
   const [draftErrors, setDraftErrors] = useState<Record<string, string>>({});
+  const [channelOverrides, setChannelOverrides] = useState<Record<string, string>>({});
+  const [slackChannels, setSlackChannels] = useState<SlackChannel[]>([]);
+  const [channelsError, setChannelsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    api.listSlackChannels()
+      .then((channels) => {
+        if (!active) return;
+        setSlackChannels(channels);
+      })
+      .catch((error) => {
+        if (!active) return;
+        setChannelsError(error instanceof Error ? error.message : "Failed to load channels");
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const ticketsWithScores = useMemo(() => {
     return tickets.map((ticket) => {
@@ -113,7 +132,8 @@ export default function ActiveTicketsTable({ tickets, onRefresh }: ActiveTickets
     setDraftLoadingTicket(ticket.ticket_id);
     setDraftErrors((prev) => ({ ...prev, [ticket.ticket_id]: "" }));
     try {
-      const result = await api.generateDraft(ticket.ticket_id);
+      const channelId = channelOverrides[ticket.ticket_id]?.trim();
+      const result = await api.generateDraft(ticket.ticket_id, channelId || undefined);
       setDraftResults((prev) => ({ ...prev, [ticket.ticket_id]: result }));
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to generate draft";
@@ -246,6 +266,32 @@ export default function ActiveTicketsTable({ tickets, onRefresh }: ActiveTickets
                             {analysisResults[ticket.ticket_id].matched_articles.length === 0 ? (
                               <div className="space-y-3">
                                 <div className="text-sm text-muted-foreground">No articles found.</div>
+                                  <div className="flex flex-col gap-2">
+                                    <label className="text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground">
+                                      Slack Channel
+                                    </label>
+                                    {channelsError ? (
+                                      <div className="text-xs text-red-500">{channelsError}</div>
+                                    ) : (
+                                      <select
+                                        className="h-9 rounded-md border border-border bg-transparent px-3 text-xs text-foreground"
+                                        value={channelOverrides[ticket.ticket_id] || ""}
+                                        onChange={(event) =>
+                                          setChannelOverrides((prev) => ({
+                                            ...prev,
+                                            [ticket.ticket_id]: event.target.value,
+                                          }))
+                                        }
+                                      >
+                                        <option value="">Use default channel</option>
+                                        {slackChannels.map((channel) => (
+                                          <option key={channel.id} value={channel.id}>
+                                            {channel.is_private ? "🔒" : "#"}{channel.name}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    )}
+                                  </div>
                                 <div className="flex flex-wrap items-center gap-3">
                                   <Button
                                     size="sm"

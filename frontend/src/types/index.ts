@@ -83,3 +83,9 @@ export interface AnalyzeResult {
 export interface GenerateDraftResult extends KnowledgeDraft {
   generated_content: string;
 }
+
+export interface SlackChannel {
+  id: string;
+  name: string;
+  is_private: boolean;
+}

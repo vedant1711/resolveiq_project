@@ -1,4 +1,4 @@
-import type { User, VPMetrics, DevDashboard, AnalyzeResult, GenerateDraftResult, KnowledgeDraft } from "@/types";
+import type { User, VPMetrics, DevDashboard, AnalyzeResult, GenerateDraftResult, KnowledgeDraft, SlackChannel } from "@/types";
 
 const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -52,11 +52,11 @@ export const api = {
     return res.json();
   },
 
-  async generateDraft(ticketId: string): Promise<GenerateDraftResult> {
+  async generateDraft(ticketId: string, channelId?: string): Promise<GenerateDraftResult> {
     const res = await fetch(`${BASE}/api/tickets/${ticketId}/generate-draft/`, {
       method: "POST",
       headers: getHeaders(),
-      body: JSON.stringify({}),
+      body: JSON.stringify(channelId ? { channel_id: channelId } : {}),
     });
     return res.json();
   },
@@ -67,5 +67,12 @@ export const api = {
       headers: getHeaders(),
     });
     return res.json();
+  },
+
+  async listSlackChannels(): Promise<SlackChannel[]> {
+    const res = await fetch(`${BASE}/api/slack/channels/`, { headers: getHeaders() });
+    if (!res.ok) throw new Error("Failed to load Slack channels");
+    const data = await res.json();
+    return data.channels || [];
   },
 };

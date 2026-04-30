@@ -172,3 +172,25 @@ def slack_status(request):
         "client_id_set": bool(client_id),
         "channel_id_set": bool(channel_id),
     })
+
+
+@require_http_methods(["GET"])
+def slack_channels(request):
+    """
+    Returns a list of Slack channels visible to the bot.
+    """
+    try:
+        channels = slack_service.list_channels()
+    except Exception as e:
+        logger.error(f"Slack list channels error: {e}")
+        return JsonResponse({"error": "Failed to list channels"}, status=502)
+
+    results = [
+        {
+            "id": channel.get("id"),
+            "name": channel.get("name"),
+            "is_private": channel.get("is_private", False),
+        }
+        for channel in channels
+    ]
+    return JsonResponse({"channels": results})

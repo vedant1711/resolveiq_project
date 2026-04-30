@@ -14,6 +14,7 @@ urlpatterns = [
     path("slack/oauth/callback/", slack_views.slack_oauth_callback),
     path("slack/events/", slack_views.slack_events),
     path("slack/status/", slack_views.slack_status),
+    path("slack/channels/", slack_views.slack_channels),
 
     # Live integrations
     path("webhooks/jira/", webhook_views.jira_webhook),
