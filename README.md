@@ -4,9 +4,7 @@
 
 ### 🎥 See ResolveIQ in Action
 
-<video src="assets/resolve_iq_demo_recording.mp4" controls="controls" muted="muted" style="max-width: 100%;">
-  Your browser does not support the video tag.
-</video>
+https://github.com/vedant1711/ResolveIQ_Project/raw/main/assets/resolve_iq_demo_recording.mp4
 
 ---
 
