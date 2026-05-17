@@ -4,7 +4,10 @@
 
 ### 🎥 See ResolveIQ in Action
 
-https://github.com/vedant1711/ResolveIQ_Project/raw/main/assets/resolve_iq_demo_recording.mp4
+
+https://github.com/user-attachments/assets/5b65fc43-7944-4ff3-be8d-56573357af6e
+
+
 
 ---
 
