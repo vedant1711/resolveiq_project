@@ -1,5 +1,15 @@
 # ResolveIQ Project
 
+**ResolveIQ** is an AI-powered IT incident resolution platform that ensures your engineering teams never solve the same problem twice. By seamlessly integrating with Slack, Jira, and Confluence, ResolveIQ automatically analyzes production outages, surfaces relevant knowledge base articles in real-time, and generates new documentation drafts directly from incident chat threads.
+
+### 🎥 See ResolveIQ in Action
+
+<video src="assets/resolve_iq_demo_recording.mp4" controls="controls" muted="muted" style="max-width: 100%;">
+  Your browser does not support the video tag.
+</video>
+
+---
+
 Monorepo containing the ResolveIQ frontend (Next.js) and backend (Django/DRF).
 
 ## 📁 Structure
